@@ -1,0 +1,255 @@
+# Debugging the country preference tracking to ensure the correct countries are identified and recommendations are accurate
+
+html_content_debugged = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Musings</title>
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #f0e6d6;
+            color: #2c2c54;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 3em;
+            letter-spacing: 3px;
+            color: #a67c00;
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+        .musical {
+            background-color: #fff8e1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #a67c00;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .musical h2 {
+            margin: 0;
+            padding-bottom: 10px;
+            color: #3e2723;
+        }
+        .rating {
+            margin-top: 10px;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8efd4;
+            border-radius: 5px;
+            border: 2px solid #b08400;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background-color: #d4a017;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #b8860b;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <h1>Musical Musings</h1>
+    <div class="container" id="musical-list"></div>
+
+    <div class="container summary">
+        <h3>Country Preferences</h3>
+        <p id="country-preferences">No ratings yet.</p>
+    </div>
+
+    <button onclick="showTopCountries()">Submit Ratings</button>
+    <button onclick="rateMoreMusicals()">Rate 10 More Musicals</button>
+
+    <div class="container summary">
+        <h3>Top 3 Countries</h3>
+        <p id="top-countries">Submit your ratings to see the top 3 countries.</p>
+    </div>
+
+    <div class="container summary">
+        <h3>Musical Recommendations</h3>
+        <p id="recommendations">Submit your ratings to get recommendations.</p>
+    </div>
+
+    <script>
+        // Sample data from JSON (in reality, you will fetch this from the JSON file)
+        const musicals = [
+            { "title": "Show Boat", "director": "Zeke Colvan, Oscar Hammerstein II", "year": 1927, "country": "USA" },
+            { "title": "The Threepenny Opera", "director": "Erich Engel", "year": 1931, "country": "Germany" },
+            { "title": "42nd Street", "director": "Lloyd Bacon", "year": 1933, "country": "USA" },
+            { "title": "Top Hat", "director": "Mark Sandrich", "year": 1935, "country": "USA" },
+            { "title": "The Wizard of Oz", "director": "Victor Fleming", "year": 1939, "country": "USA" },
+            { "title": "Oklahoma!", "director": "Fred Zinnemann", "year": 1955, "country": "USA" },
+            { "title": "An American in Paris", "director": "Vincente Minnelli", "year": 1951, "country": "USA" },
+            { "title": "Singin' in the Rain", "director": "Stanley Donen, Gene Kelly", "year": 1952, "country": "USA" },
+            { "title": "The Band Wagon", "director": "Vincente Minnelli", "year": 1953, "country": "USA" },
+            { "title": "Carousel", "director": "Henry King", "year": 1956, "country": "USA" }
+        ];
+
+        // Musicals not shown in the initial rating list (for recommendations)
+        const additionalMusicals = [
+            { "title": "Les Misérables", "director": "Tom Hooper", "year": 2012, "country": "UK" },
+            { "title": "The Sound of Music", "director": "Robert Wise", "year": 1965, "country": "USA" },
+            { "title": "Mamma Mia!", "director": "Phyllida Lloyd", "year": 2008, "country": "UK" },
+            { "title": "Cabaret", "director": "Bob Fosse", "year": 1972, "country": "Germany" },
+            { "title": "Evita", "director": "Alan Parker", "year": 1996, "country": "USA" }
+        ];
+
+        // Object to store the count of countries rated 3 or better
+        const countryRatings = {};
+
+        // Track rated musicals to exclude from recommendations
+        const ratedMusicals = new Set();
+
+        // Function to shuffle and select 10 musicals randomly
+        function selectRandomMusicals(musicals) {
+            const shuffled = musicals.filter(musical => !ratedMusicals.has(musical.title)).sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 10);
+        }
+
+        // Function to create and display the musical list with rating options
+        function displayMusicals() {
+            const musicalList = document.getElementById("musical-list");
+            musicalList.innerHTML = ""; // Clear previous musicals
+            const randomMusicals = selectRandomMusicals([...musicals, ...additionalMusicals]);
+            
+            randomMusicals.forEach((musical, index) => {
+                ratedMusicals.add(musical.title);  // Add to the set of rated musicals
+                const musicalDiv = document.createElement("div");
+                musicalDiv.classList.add("musical");
+
+                const title = document.createElement("h2");
+                title.textContent = `${musical.title} (${musical.year})`;
+
+                const director = document.createElement("p");
+                director.textContent = `Directed by: ${musical.director}`;
+
+                const country = document.createElement("p");
+                country.textContent = `Country of Origin: ${musical.country}`;
+
+                const ratingDiv = document.createElement("div");
+                ratingDiv.classList.add("rating");
+
+                ratingDiv.innerHTML = `
+                    <label><input type="radio" name="rating${index}" value="1" onclick="updateCountryRatings('${musical.country}', 1)"> 1</label>
+                    <label><input type="radio" name="rating${index}" value="2" onclick="updateCountryRatings('${musical.country}', 2)"> 2</label>
+                    <label><input type="radio" name="rating${index}" value="3" onclick="updateCountryRatings('${musical.country}', 3)"> 3</label>
+                    <label><input type="radio" name="rating${index}" value="4" onclick="updateCountryRatings('${musical.country}', 4)"> 4</label>
+                    <label><input type="radio" name="rating${index}" value="5" onclick="updateCountryRatings('${musical.country}', 5)"> 5</label>
+                    <label><input type="radio" name="rating${index}" value="haven't seen" onclick="updateCountryRatings('${musical.country}', 'haven\'t seen')"> Haven't seen it</label>
+                `;
+
+                musicalDiv.appendChild(title);
+                musicalDiv.appendChild(director);
+                musicalDiv.appendChild(country);
+                musicalDiv.appendChild(ratingDiv);
+
+                musicalList.appendChild(musicalDiv);
+            });
+        }
+
+        // Function to update country ratings when a user selects a rating
+        function updateCountryRatings(country, rating) {
+            if (rating >= 3 && rating !== "haven't seen") {
+                if (!countryRatings[country]) {
+                    countryRatings[country] = 1;
+                } else {
+                    countryRatings[country]++;
+                }
+            }
+            updateCountryPreferences();
+        }
+
+        // Function to display the country preferences based on the ratings
+        function updateCountryPreferences() {
+            const preferencesDiv = document.getElementById("country-preferences");
+            preferencesDiv.innerHTML = "";
+
+            if (Object.keys(countryRatings).length === 0) {
+                preferencesDiv.textContent = "No ratings yet.";
+            } else {
+                const preferenceList = Object.entries(countryRatings).map(([country, count]) => {
+                    return `${country}: ${count} rating(s) of 3 or better`;
+                }).join("<br>");
+                preferencesDiv.innerHTML = preferenceList;
+            }
+        }
+
+        // Function to display top 3 countries after user submits ratings
+        function showTopCountries() {
+            const topCountriesDiv = document.getElementById("top-countries");
+
+            if (Object.keys(countryRatings).length === 0) {
+                topCountriesDiv.textContent = "No ratings to show.";
+            } else {
+                const sortedCountries = Object.entries(countryRatings).sort((a, b) => b[1] - a[1]).slice(0, 3);
+                const topCountriesList = sortedCountries.map(([country, count]) => `${country}: ${count} rating(s)`).join("<br>");
+                topCountriesDiv.innerHTML = topCountriesList;
+
+                // Call function to show recommendations based on top 3 countries
+                showRecommendations(sortedCountries.map(([country]) => country));
+            }
+        }
+
+        // Function to recommend musicals from top countries not already rated
+        function showRecommendations(topCountries) {
+            const recommendationsDiv = document.getElementById("recommendations");
+            recommendationsDiv.innerHTML = "";
+
+            const recommendations = [];
+
+            topCountries.forEach(country => {
+                const countryRecommendations = additionalMusicals.filter(musical => musical.country === country && !ratedMusicals.has(musical.title));
+                if (countryRecommendations.length > 0) {
+                    recommendations.push(countryRecommendations[0]);  // Pick the first one available from that country
+                }
+            });
+
+            if (recommendations.length > 0) {
+                const recommendationList = recommendations.map(musical => `${musical.title} (${musical.year}) - ${musical.country}`).join("<br>");
+                recommendationsDiv.innerHTML = recommendationList;
+            } else {
+                recommendationsDiv.textContent = "No recommendations available.";
+            }
+        }
+
+        // Function to allow the user to rate 10 more musicals
+        function rateMoreMusicals() {
+            displayMusicals();
+        }
+
+        // Call the function to display the musicals when the page loads
+        window.onload = displayMusicals;
+    </script>
+
+</body>
+</html>
+"""
+
+# Save the updated HTML content to a file
+html_file_debugged_path = "/mnt/data/musical_ratings_debugged.html"
+with open(html_file_debugged_path, "w") as html_file:
+    html_file.write(html_content_debugged)
+
+html_file_debugged_path

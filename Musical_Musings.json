@@ -1,0 +1,68 @@
+import json
+
+# List of musicals with their respective details
+musicals = [
+    {"title": "Show Boat", "director": "Zeke Colvan, Oscar Hammerstein II", "year": 1927, "country": "USA"},
+    {"title": "The Threepenny Opera", "director": "Erich Engel", "year": 1931, "country": "Germany"},
+    {"title": "42nd Street", "director": "Lloyd Bacon", "year": 1933, "country": "USA"},
+    {"title": "Top Hat", "director": "Mark Sandrich", "year": 1935, "country": "USA"},
+    {"title": "The Wizard of Oz", "director": "Victor Fleming", "year": 1939, "country": "USA"},
+    {"title": "Oklahoma!", "director": "Fred Zinnemann", "year": 1955, "country": "USA"},
+    {"title": "An American in Paris", "director": "Vincente Minnelli", "year": 1951, "country": "USA"},
+    {"title": "Singin' in the Rain", "director": "Stanley Donen, Gene Kelly", "year": 1952, "country": "USA"},
+    {"title": "The Band Wagon", "director": "Vincente Minnelli", "year": 1953, "country": "USA"},
+    {"title": "Carousel", "director": "Henry King", "year": 1956, "country": "USA"},
+    {"title": "West Side Story", "director": "Jerome Robbins, Robert Wise", "year": 1961, "country": "USA"},
+    {"title": "My Fair Lady", "director": "George Cukor", "year": 1964, "country": "USA"},
+    {"title": "The Sound of Music", "director": "Robert Wise", "year": 1965, "country": "USA"},
+    {"title": "Cabaret", "director": "Bob Fosse", "year": 1972, "country": "USA"},
+    {"title": "Fiddler on the Roof", "director": "Norman Jewison", "year": 1971, "country": "USA"},
+    {"title": "Oliver!", "director": "Carol Reed", "year": 1968, "country": "UK"},
+    {"title": "Jesus Christ Superstar", "director": "Norman Jewison", "year": 1973, "country": "USA"},
+    {"title": "Grease", "director": "Randal Kleiser", "year": 1978, "country": "USA"},
+    {"title": "The Rocky Horror Picture Show", "director": "Jim Sharman", "year": 1975, "country": "UK"},
+    {"title": "A Chorus Line", "director": "Richard Attenborough", "year": 1985, "country": "USA"},
+    {"title": "Evita", "director": "Alan Parker", "year": 1996, "country": "USA"},
+    {"title": "The Phantom of the Opera", "director": "Joel Schumacher", "year": 2004, "country": "USA"},
+    {"title": "Les Misérables", "director": "Tom Hooper", "year": 2012, "country": "UK"},
+    {"title": "Chicago", "director": "Rob Marshall", "year": 2002, "country": "USA"},
+    {"title": "Moulin Rouge!", "director": "Baz Luhrmann", "year": 2001, "country": "Australia"},
+    {"title": "The Lion King", "director": "Julie Taymor", "year": 1997, "country": "USA"},
+    {"title": "Aladdin", "director": "Casey Nicholaw, Scott Weinger", "year": 2011, "country": "USA"},
+    {"title": "Beauty and the Beast", "director": "Robert Jess Roth", "year": 1994, "country": "USA"},
+    {"title": "Matilda the Musical", "director": "Matthew Warchus", "year": 2010, "country": "UK"},
+    {"title": "Hamilton", "director": "Thomas Kail", "year": 2015, "country": "USA"},
+    {"title": "La La Land", "director": "Damien Chazelle", "year": 2016, "country": "USA"},
+    {"title": "The Greatest Showman", "director": "Michael Gracey", "year": 2017, "country": "USA"},
+    {"title": "Mary Poppins", "director": "Robert Stevenson", "year": 1964, "country": "USA"},
+    {"title": "Porgy and Bess", "director": "Rouben Mamoulian", "year": 1959, "country": "USA"},
+    {"title": "Guys and Dolls", "director": "Joseph L. Mankiewicz", "year": 1955, "country": "USA"},
+    {"title": "Bye Bye Birdie", "director": "George Sidney", "year": 1963, "country": "USA"},
+    {"title": "Sweeney Todd: The Demon Barber of Fleet Street", "director": "Tim Burton", "year": 2007, "country": "USA"},
+    {"title": "Billy Elliot the Musical", "director": "Stephen Daldry", "year": 2005, "country": "UK"},
+    {"title": "Rent", "director": "Michael Greif", "year": 1996, "country": "USA"},
+    {"title": "Cats", "director": "Trevor Nunn", "year": 1981, "country": "UK"},
+    {"title": "Wicked", "director": "Joe Mantello", "year": 2003, "country": "USA"},
+    {"title": "Dreamgirls", "director": "Bill Condon", "year": 2006, "country": "USA"},
+    {"title": "Funny Girl", "director": "William Wyler", "year": 1968, "country": "USA"},
+    {"title": "South Pacific", "director": "Joshua Logan", "year": 1958, "country": "USA"},
+    {"title": "Sweet Charity", "director": "Bob Fosse", "year": 1969, "country": "USA"},
+    {"title": "Hairspray", "director": "Adam Shankman", "year": 2007, "country": "USA"},
+    {"title": "Mamma Mia!", "director": "Phyllida Lloyd", "year": 2008, "country": "UK"},
+    {"title": "In the Heights", "director": "Jon M. Chu", "year": 2021, "country": "USA"},
+    {"title": "Once", "director": "John Carney", "year": 2007, "country": "Ireland"},
+    {"title": "Joseph and the Amazing Technicolor Dreamcoat", "director": "Tim O'Brien", "year": 1999, "country": "USA"},
+    {"title": "Kinky Boots", "director": "Jerry Mitchell", "year": 2013, "country": "USA"},
+    {"title": "The Book of Mormon", "director": "Trey Parker, Casey Nicholaw", "year": 2011, "country": "USA"},
+    {"title": "Waitress", "director": "Diane Paulus", "year": 2015, "country": "USA"},
+]
+
+# Convert list to JSON format
+json_data = json.dumps(musicals, indent=4)
+
+# Save JSON to file
+file_path = "/mnt/data/musicals_list.json"
+with open(file_path, "w") as json_file:
+    json_file.write(json_data)
+
+file_path
