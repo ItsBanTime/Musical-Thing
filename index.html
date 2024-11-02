@@ -66,22 +66,17 @@
             textAlign(LEFT);
             text('X: ' + mouseX + ' Y: ' + mouseY, 10, height - 10);
 
-            // Display approximate coordinates of key objects
-            fill(255, 0, 0);
-            text('Laptop Screen: X: 450 - 650, Y: 800 - 900', 10, height - 30);
-            text('Phone: X: 700 - 750, Y: 850 - 900', 10, height - 50);
-            text('Man in Doorway: X: 450 - 550, Y: 50 - 200', 10, height - 70);
-        }
+                    }
 
         function displayLabels() {
             fill(255, 0, 0);
             textSize(16);
             textAlign(LEFT);
-            if (mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) {
+            if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
                 text('Laptop', mouseX + 10, mouseY);
-            } else if (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) {
+            } else if (mouseX >= 808 && mouseX <= 858 && mouseY >= 850 && mouseY <= 900) {
                 text('Phone', mouseX + 10, mouseY);
-            } else if (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200) {
+            } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
                 text('The Creature', mouseX + 10, mouseY);
             }
         }
@@ -97,11 +92,11 @@
         }
 
         function mousePressed() {
-            if (mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) {
+            if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
                 console.log('Laptop clicked');
             } else if (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) {
                 console.log('Phone clicked');
-            } else if (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200) {
+            } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
                 console.log('The Creature clicked');
             }
         }
