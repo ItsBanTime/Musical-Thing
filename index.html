@@ -19,8 +19,9 @@
   <body>
     <script>
       let bgImage;
-      let laptopMessage = "";
-let phoneMessage = "";
+      let points = 0;
+      let laptopMessage = "";
+      let phoneMessage = "";
       let creatureMessage = "";
       let showOptions = false;
 
@@ -33,13 +34,19 @@ let phoneMessage = "";
         canvas.parent(document.body);
       }
 
-      displayLaptopMessage();
-fill(0);
+      function draw() {
+        if (bgImage) {
+          background(bgImage);
+        } else {
+          background(200);
+        }
+        fill(0);
         ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
         displayCoordinates();
         checkInteractiveZones();
         displayPoints();
         displayPhoneMessage();
+        displayLaptopMessage();
         displayCreatureMessage();
         displayOptions();
       }
@@ -75,7 +82,14 @@ fill(0);
         }
       }
 
-
+      function displayCreatureMessage() {
+        if (creatureMessage !== "") {
+          fill(255, 0, 0);
+          textSize(24);
+          textAlign(LEFT, TOP);
+          text(creatureMessage, 20, 150); // Display the creature message on the canvas
+        }
+      }
 
       function displayOptions() {
         if (showOptions) {
@@ -129,8 +143,13 @@ fill(0);
       }
 
       function mousePressed() {
-        laptopMessage = "Email from Jerry: Dude, check your phone, everyone's wondering where you're at!";
-}
+        // Laptop screen zone click action
+        if (mouseX > 400 && mouseX < 600 && mouseY > 700 && mouseY < 900) {
+          console.log('Laptop screen clicked');
+          points += 10;
+          laptopMessage = "Email from Jerry: Dude, check your phone, everyone's wondering where you're at!";
+          showOptions = true;
+        }
 
         // Phone zone click action
         if (mouseX > 650 && mouseX < 800 && mouseY > 800 && mouseY < 950) {
