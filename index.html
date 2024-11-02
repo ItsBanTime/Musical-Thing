@@ -85,6 +85,33 @@
             option3.style('margin', '10px');
             option3.parent(messageBox);
         }
+            function displayLabels() {
+            fill(255, 0, 0);
+            textSize(16);
+            textAlign(LEFT);
+            if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
+                text('Laptop', mouseX + 10, mouseY);
+                cursor('pointer');
+            } else if (mouseX >= 808 && mouseX <= 858 && mouseY >= 850 && mouseY <= 900) {
+                text('Phone', mouseX + 10, mouseY);
+                cursor('pointer');
+            } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
+                text('The Creature', mouseX + 10, mouseY);
+                cursor('pointer');
+            } else {
+                cursor('default');
+            }
+        }
+
+        function mousePressed() {
+            if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
+                console.log('Laptop clicked');
+            } else if (mouseX >= 808 && mouseX <= 858 && mouseY >= 850 && mouseY <= 900) {
+                showMessage();
+            } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
+                console.log('The Creature clicked');
+            }
+        }
     </script>
     <style>
         body {
