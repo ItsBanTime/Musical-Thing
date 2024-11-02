@@ -49,6 +49,11 @@
         displayLaptopMessage();
         displayCreatureMessage();
         displayOptions();
+        if (!showOptions) {
+          laptopMessage = "";
+          phoneMessage = "";
+          creatureMessage = "";
+        }
       }
 
       function displayCoordinates() {
@@ -58,7 +63,7 @@
       }
 
       function displayPoints() {
-        fill(255, 0, 0, 200); // Ensure points are always displayed on top of background
+        fill(255, 0, 0); // Ensure points are always displayed on top of background
         textSize(32);
         textAlign(RIGHT, TOP);
         text(`Points: ${points}`, width - 10, 10); // Display points in the top-right corner
@@ -97,13 +102,13 @@
           textSize(24);
           textAlign(CENTER, TOP);
           text('1. Ignore', width / 2, height / 2 + 50);
-          text('2. Getting off now, Ill be right there', width / 2, height / 2 + 80);
+          text('2. Getting off now, I will be right there', width / 2, height / 2 + 80);
         } else if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
           fill(0, 255, 0);
           textSize(24);
           textAlign(CENTER, TOP);
           text('1. Why do I always have to buy beer? You do it!', width / 2, height / 2 + 50);
-          text('2. Ill be right there, Coors Banquet good with you?', width / 2, height / 2 + 80);
+          text('2. I will be right there, Coors Banquet good with you?', width / 2, height / 2 + 80);
         }
       }
 
@@ -169,17 +174,20 @@
         // Handle options click
         if (showOptions) {
           // Ignore option
-          if (mouseX > 20 && mouseX < 180 && mouseY > 100 && mouseY < 120) {
-            points -= 500;
+          if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 50 && mouseY < height / 2 + 70) {
             showOptions = false;
-            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
+            laptopMessage = "";
+            phoneMessage = "";
+            creatureMessage = "";
           }
 
           // "Getting off now" option
-          if (mouseX > 20 && mouseX < 450 && mouseY > 130 && mouseY < 150) {
+          if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 80 && mouseY < height / 2 + 100) {
             points += 500;
             showOptions = false;
-            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
+            laptopMessage = "";
+            phoneMessage = "";
+            creatureMessage = "";
           }
         }
 
@@ -189,16 +197,17 @@
           if (mouseX > 20 && mouseX < 450 && mouseY > 100 && mouseY < 120) {
             points -= 500;
             phoneMessage = "";
+            showOptions = false;
           }
 
           // "I'll be right there, Coors Banquet good with you?" option
           if (mouseX > 20 && mouseX < 600 && mouseY > 130 && mouseY < 150) {
             points += 500;
             phoneMessage = "";
+            showOptions = false;
           }
         }
       }
     </script>
   </body>
 </html>
-
