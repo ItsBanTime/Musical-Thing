@@ -4,7 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P5.js Canvas Game</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js">        function showMessage() {
+            let messageBox = createDiv('Text from Jerry: Dude where are you? The party\'s about to start!');
+            messageBox.style('font-size', '24px');
+            messageBox.style('color', 'white');
+            messageBox.style('background', 'rgba(0, 0, 0, 0.8)');
+            messageBox.style('padding', '20px');
+            messageBox.style('text-align', 'center');
+            messageBox.style('width', '400px');
+            messageBox.style('position', 'absolute');
+            messageBox.style('top', '50%');
+            messageBox.style('left', '50%');
+            messageBox.style('transform', 'translate(-50%, -50%)');
+            
+            let option1 = createButton('Ignore');
+            option1.mousePressed(() => {
+                score -= 500;
+                messageBox.remove();
+                option1.remove();
+                option2.remove();
+                showNextMessage();
+            });
+            option1.style('margin', '10px');
+            option1.parent(messageBox);
+
+            let option2 = createButton('Getting off now, be right there');
+            option2.mousePressed(() => {
+                score += 500;
+                messageBox.remove();
+                option1.remove();
+                option2.remove();
+                showNextMessage();
+            });
+            option2.style('margin', '10px');
+            option2.parent(messageBox);
+        }
+            function showNextMessage() {
+            let messageBox = createDiv('Text from Anna: Are you gonna be here soon? Can you pick up some beer?');
+            messageBox.style('font-size', '24px');
+            messageBox.style('color', 'white');
+            messageBox.style('background', 'rgba(0, 0, 0, 0.8)');
+            messageBox.style('padding', '20px');
+            messageBox.style('text-align', 'center');
+            messageBox.style('width', '400px');
+            messageBox.style('position', 'absolute');
+            messageBox.style('top', '50%');
+            messageBox.style('left', '50%');
+            messageBox.style('transform', 'translate(-50%, -50%)');
+            
+            let option1 = createButton('Ignore');
+            option1.mousePressed(() => {
+                score -= 500;
+                messageBox.remove();
+                option1.remove();
+                option2.remove();
+                option3.remove();
+            });
+            option1.style('margin', '10px');
+            option1.parent(messageBox);
+
+            let option2 = createButton('I will be there soon, but I dont wanna pick up beer, you do it');
+            option2.mousePressed(() => {
+                score += 250;
+                messageBox.remove();
+                option1.remove();
+                option2.remove();
+                option3.remove();
+            });
+            option2.style('margin', '10px');
+            option2.parent(messageBox);
+
+            let option3 = createButton('Of course, Coors Banquet good with you?');
+            option3.mousePressed(() => {
+                score += 500;
+                messageBox.remove();
+                option1.remove();
+                option2.remove();
+                option3.remove();
+            });
+            option3.style('margin', '10px');
+            option3.parent(messageBox);
+        }
+    </script>
     <style>
         body {
             display: flex;
@@ -70,27 +151,7 @@
             if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
                 text('Laptop', mouseX + 10, mouseY);
             } else if (mouseX >= 808 && mouseX <= 858 && mouseY >= 850 && mouseY <= 900) {
-                text('Phone', mouseX + 10, mouseY);
-            } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
-                text('The Creature', mouseX + 10, mouseY);
-            }
-        }
-
-        function updateCursor() {
-            if ((mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) ||
-                (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) ||
-                (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200)) {
-                cursor('pointer');
-            } else {
-                cursor('default');
-            }
-        }
-
-        function mousePressed() {
-            if (mouseX >= 500 && mouseX <= 600 && mouseY >= 680 && mouseY <= 780) {
-                console.log('Laptop clicked');
-            } else if (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) {
-                console.log('Phone clicked');
+                showMessage();
             } else if (mouseX >= 511 && mouseX <= 561 && mouseY >= 315 && mouseY <= 365) {
                 console.log('The Creature clicked');
             }
