@@ -1,212 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple P5.js Game</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P5.js Canvas Game</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <style>
-      body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        overflow: hidden;
-      }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+    <div id="canvas-container"></div>
     <script>
-      let bgImage;
-      let points = 0;
-      let laptopMessage = "";
-      let phoneMessage = "";
-      let creatureMessage = "";
-      let showOptions = false;
+        let player;
+        let coin;
+        let score = 0;
+        let bg;
 
-      function preload() {
-        bgImage = loadImage('./spookytimeFR.jpg');
-      }
-
-      function setup() {
-        let canvas = createCanvas(1000, 1000);
-        canvas.parent(document.body);
-      }
-
-      function draw() {
-        if (bgImage) {
-          background(bgImage);
-        } else {
-          background(200);
-        }
-        displayPoints();
-        fill(0);
-        ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
-        displayCoordinates();
-        checkInteractiveZones();
-        displayPhoneMessage();
-        displayLaptopMessage();
-        displayCreatureMessage();
-        displayOptions();
-        if (!showOptions) {
-          laptopMessage = "";
-          phoneMessage = "";
-          creatureMessage = "";
-        }
-      }
-
-      function displayCoordinates() {
-        fill(255);
-        textSize(16);
-        text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10); // Display mouse coordinates in the bottom-left corner
-      }
-
-      function displayPoints() {
-        fill(255, 0, 0); // Ensure points are always displayed on top of background
-        textSize(32);
-        textAlign(RIGHT, TOP);
-        text(`Points: ${points}`, width - 10, 10); // Display points in the top-right corner
-      }
-
-      function displayPhoneMessage() {
-        if (phoneMessage !== "") {
-          fill(255, 0, 0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text(phoneMessage, width / 2, height / 2); // Display the phone message on the canvas
-        }
-      }
-
-      function displayLaptopMessage() {
-        if (laptopMessage !== "") {
-          fill(255, 0, 0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text(laptopMessage, width / 2, height / 2); // Display the laptop message on the canvas
-        }
-      }
-
-      function displayCreatureMessage() {
-        if (creatureMessage !== "") {
-          fill(255, 0, 0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text(creatureMessage, width / 2, height / 2); // Display the creature message on the canvas
-        }
-      }
-
-      function displayOptions() {
-        if (showOptions) {
-          fill(0, 255, 0);
-          textSize(24);
-          textAlign(CENTER, TOP);
-          text('1. Ignore', width / 2, height / 2 + 50);
-          text('2. Getting off now, I will be right there', width / 2, height / 2 + 80);
-        } else if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
-          fill(0, 255, 0);
-          textSize(24);
-          textAlign(CENTER, TOP);
-          text('1. Why do I always have to buy beer? You do it!', width / 2, height / 2 + 50);
-          text('2. I will be right there, Coors Banquet good with you?', width / 2, height / 2 + 80);
-        }
-      }
-
-      function checkInteractiveZones() {
-        let inZone = false;
-
-        // Laptop screen zone (approx. bottom center)
-        if (mouseX > 400 && mouseX < 600 && mouseY > 700 && mouseY < 900) {
-          fill(255, 0, 0);
-          textSize(20);
-          text('Laptop Screen', mouseX + 10, mouseY + 10);
-          inZone = true;
+        function preload() {
+            bg = loadImage('spookytimeFR.jpg');
         }
 
-        // Phone zone (approx. to the right of the laptop screen)
-        if (mouseX > 650 && mouseX < 800 && mouseY > 800 && mouseY < 950) {
-          fill(255, 0, 0);
-          textSize(20);
-          text('Phone', mouseX + 10, mouseY + 10);
-          inZone = true;
+        function setup() {
+            let canvas = createCanvas(1000, 1000);
+            canvas.parent('canvas-container');
+            player = new Player();
+            coin = new Coin();
         }
 
-        // The Creature zone (approx. top center)
-        if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
-          fill(255, 0, 0);
-          textSize(20);
-          text('The Creature', mouseX + 10, mouseY + 10);
-          inZone = true;
+        function draw() {
+            background(bg);
+            player.update();
+            player.show();
+            coin.show();
+
+            if (player.collects(coin)) {
+                score++;
+                coin = new Coin();
+            }
+
+            fill(0);
+            textSize(32);
+            textAlign(LEFT);
+            text('Score: ' + score, 10, 40);
+            displayCoordinates();
+            displayLabels();
+            updateCursor();
         }
 
-        // Change cursor to pointer if in an interactive zone
-        if (inZone) {
-          cursor('pointer');
-        } else {
-          cursor('default');
-        }
-      }
+        function displayCoordinates() {
+            fill(0);
+            textSize(16);
+            textAlign(LEFT);
+            text('X: ' + mouseX + ' Y: ' + mouseY, 10, height - 10);
 
-      function mousePressed() {
-        // Laptop screen zone click action
-        if (mouseX > 400 && mouseX < 600 && mouseY > 700 && mouseY < 900) {
-          console.log('Laptop screen clicked');
-          points += 10;
-          laptopMessage = "Email from Jerry: Dude, check your phone, everyone's wondering where you're at!";
-          showOptions = true;
+            // Display approximate coordinates of key objects
+            fill(255, 0, 0);
+            text('Laptop Screen: X: 450 - 650, Y: 800 - 900', 10, height - 30);
+            text('Phone: X: 700 - 750, Y: 850 - 900', 10, height - 50);
+            text('Man in Doorway: X: 450 - 550, Y: 50 - 200', 10, height - 70);
         }
 
-        
-          // Immediately start second interaction after phone
-          if (!showOptions && phoneMessage === "Text from Jerry- Dude, the party's about to start, where are you?") {
-            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
-            showOptions = true;
-          }
-
-        // The Creature zone click action
-        if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
-          console.log('The Creature clicked');
-          points += 10;
-          creatureMessage = "Hey buddy, did ya get my email?";
+        function displayLabels() {
+            fill(255, 0, 0);
+            textSize(16);
+            textAlign(LEFT);
+            if (mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) {
+                text('Laptop', mouseX + 10, mouseY);
+            } else if (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) {
+                text('Phone', mouseX + 10, mouseY);
+            } else if (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200) {
+                text('The Creature', mouseX + 10, mouseY);
+            }
         }
 
-        // Handle options click
-        if (showOptions) {
-          // Ignore option
-          if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 50 && mouseY < height / 2 + 70) {
-            showOptions = false;
-            laptopMessage = "";
-            phoneMessage = "";
-            creatureMessage = "";
-          }
-
-          // "Getting off now" option
-          if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 80 && mouseY < height / 2 + 100) {
-            points += 500;
-            showOptions = false;
-            laptopMessage = "";
-            phoneMessage = "";
-            creatureMessage = "";
-          }
+        function updateCursor() {
+            if ((mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) ||
+                (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) ||
+                (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200)) {
+                cursor('pointer');
+            } else {
+                cursor('default');
+            }
         }
 
-        // Handle options click for Anna's message
-        if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
-          // "Why do I always have to buy beer? You do it!" option
-          if (mouseX > 20 && mouseX < 450 && mouseY > 100 && mouseY < 120) {
-            points -= 500;
-            phoneMessage = "";
-            showOptions = false;
-          }
-
-          // "I'll be right there, Coors Banquet good with you?" option
-          if (mouseX > 20 && mouseX < 600 && mouseY > 130 && mouseY < 150) {
-            points += 500;
-            phoneMessage = "";
-            showOptions = false;
-          }
+        function mousePressed() {
+            if (mouseX >= 450 && mouseX <= 650 && mouseY >= 800 && mouseY <= 900) {
+                console.log('Laptop clicked');
+            } else if (mouseX >= 700 && mouseX <= 750 && mouseY >= 850 && mouseY <= 900) {
+                console.log('Phone clicked');
+            } else if (mouseX >= 450 && mouseX <= 550 && mouseY >= 50 && mouseY <= 200) {
+                console.log('The Creature clicked');
+            }
         }
-      }
+
+        class Player {
+            constructor() {
+                this.x = width / 2;
+                this.y = height / 2;
+                this.size = 50;
+                this.speed = 5;
+            }
+
+            update() {
+                if (keyIsDown(LEFT_ARROW)) {
+                    this.x -= this.speed;
+                }
+                if (keyIsDown(RIGHT_ARROW)) {
+                    this.x += this.speed;
+                }
+                if (keyIsDown(UP_ARROW)) {
+                    this.y -= this.speed;
+                }
+                if (keyIsDown(DOWN_ARROW)) {
+                    this.y += this.speed;
+                }
+
+                // Ensure player stays within canvas boundaries
+                this.x = constrain(this.x, 0, width - this.size);
+                this.y = constrain(this.y, 0, height - this.size);
+            }
+
+            show() {
+                fill(50, 150, 250);
+                noStroke();
+                ellipse(this.x, this.y, this.size);
+            }
+
+            collects(coin) {
+                let d = dist(this.x, this.y, coin.x, coin.y);
+                return d < this.size / 2 + coin.size / 2;
+            }
+        }
+
+        class Coin {
+            constructor() {
+                this.x = random(50, width - 50);
+                this.y = random(50, height - 50);
+                this.size = 30;
+            }
+
+            show() {
+                fill(255, 204, 0);
+                noStroke();
+                ellipse(this.x, this.y, this.size);
+            }
+        }
     </script>
-  </body>
+</body>
 </html>
