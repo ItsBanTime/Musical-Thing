@@ -156,13 +156,12 @@
           showOptions = true;
         }
 
-        // Phone zone click action
-        if (mouseX > 650 && mouseX < 800 && mouseY > 800 && mouseY < 950) {
-          console.log('Phone clicked');
-          points += 10;
-          phoneMessage = "Text from Jerry- Dude, the party's about to start, where are you?";
-          showOptions = true;
-        }
+        
+          // Immediately start second interaction after phone
+          if (!showOptions && phoneMessage === "Text from Jerry- Dude, the party's about to start, where are you?") {
+            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
+            showOptions = true;
+          }
 
         // The Creature zone click action
         if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
