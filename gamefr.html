@@ -21,7 +21,7 @@
       let bgImage;
 
       function preload() {
-        bgImage = loadImage('spookytimeFR.jpg');
+        bgImage = loadImage('./spookytimeFR.jpg');
       }
 
       function setup() {
@@ -30,7 +30,11 @@
       }
 
       function draw() {
-        background(bgImage);
+        if (bgImage) {
+          background(bgImage);
+        } else {
+          background(200);
+        }
         fill(0);
         ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
       }
