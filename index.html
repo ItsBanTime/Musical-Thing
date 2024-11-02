@@ -34,13 +34,17 @@
         canvas.parent(document.body);
       }
 
-      
+      function draw() {
+        if (bgImage) {
+          background(bgImage);
+        } else {
+          background(200);
+        }
         displayPoints();
         fill(0);
         ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
         displayCoordinates();
         checkInteractiveZones();
-        displayPoints();
         displayPhoneMessage();
         displayLaptopMessage();
         displayCreatureMessage();
@@ -53,43 +57,53 @@
         text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10); // Display mouse coordinates in the bottom-left corner
       }
 
-      fill(255, 0, 0, 200); // Ensure points are always displayed on top of background
+      function displayPoints() {
+        fill(255, 0, 0, 200); // Ensure points are always displayed on top of background
         textSize(32);
         textAlign(RIGHT, TOP);
         text(`Points: ${points}`, width - 10, 10); // Display points in the top-right corner
       }
 
-      fill(255, 0, 0);
-        textSize(32);
-        textAlign(CENTER, CENTER);
-        text(phoneMessage, width / 2, height / 2); // Display the phone message on the canvas
+      function displayPhoneMessage() {
+        if (phoneMessage !== "") {
+          fill(255, 0, 0);
+          textSize(32);
+          textAlign(CENTER, CENTER);
+          text(phoneMessage, width / 2, height / 2); // Display the phone message on the canvas
         }
       }
 
-      fill(255, 0, 0);
-        textSize(32);
-        textAlign(CENTER, CENTER);
-        text(laptopMessage, width / 2, height / 2); // Display the laptop message on the canvas
+      function displayLaptopMessage() {
+        if (laptopMessage !== "") {
+          fill(255, 0, 0);
+          textSize(32);
+          textAlign(CENTER, CENTER);
+          text(laptopMessage, width / 2, height / 2); // Display the laptop message on the canvas
         }
       }
 
-      fill(255, 0, 0);
-        textSize(32);
-        textAlign(CENTER, CENTER);
-        text(creatureMessage, width / 2, height / 2); // Display the creature message on the canvas
+      function displayCreatureMessage() {
+        if (creatureMessage !== "") {
+          fill(255, 0, 0);
+          textSize(32);
+          textAlign(CENTER, CENTER);
+          text(creatureMessage, width / 2, height / 2); // Display the creature message on the canvas
         }
       }
 
-      fill(0, 255, 0);
-        textSize(24);
-        textAlign(CENTER, TOP);
-        text('1. Ignore', width / 2, height / 2 + 50);
-        text('2. Getting off now, Ill be right there', width / 2, height / 2 + 80);
-        } fill(0, 255, 0);
-        textSize(24);
-        textAlign(CENTER, TOP);
-        text('1. Why do I always have to buy beer? You do it!', width / 2, height / 2 + 50);
-        text('2. Ill be right there, Coors Banquet good with you?', width / 2, height / 2 + 80);
+      function displayOptions() {
+        if (showOptions) {
+          fill(0, 255, 0);
+          textSize(24);
+          textAlign(CENTER, TOP);
+          text('1. Ignore', width / 2, height / 2 + 50);
+          text('2. Getting off now, Ill be right there', width / 2, height / 2 + 80);
+        } else if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
+          fill(0, 255, 0);
+          textSize(24);
+          textAlign(CENTER, TOP);
+          text('1. Why do I always have to buy beer? You do it!', width / 2, height / 2 + 50);
+          text('2. Ill be right there, Coors Banquet good with you?', width / 2, height / 2 + 80);
         }
       }
 
@@ -187,3 +201,4 @@
     </script>
   </body>
 </html>
+
