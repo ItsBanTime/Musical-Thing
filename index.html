@@ -19,6 +19,10 @@
   <body>
     <script>
       let bgImage;
+      let laptopMessage = "";
+let phoneMessage = "";
+      let creatureMessage = "";
+      let showOptions = false;
 
       function preload() {
         bgImage = loadImage('./spookytimeFR.jpg');
@@ -29,16 +33,15 @@
         canvas.parent(document.body);
       }
 
-      function draw() {
-        if (bgImage) {
-          background(bgImage);
-        } else {
-          background(200);
-        }
-        fill(0);
+      displayLaptopMessage();
+fill(0);
         ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
         displayCoordinates();
         checkInteractiveZones();
+        displayPoints();
+        displayPhoneMessage();
+        displayCreatureMessage();
+        displayOptions();
       }
 
       function displayCoordinates() {
@@ -47,12 +50,58 @@
         text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10); // Display mouse coordinates in the bottom-left corner
       }
 
+      function displayPoints() {
+        fill(255, 0, 0);
+        textSize(32);
+        textAlign(RIGHT, TOP);
+        text(`Points: ${points}`, width - 10, 10); // Display points in the top-right corner
+      }
+
+      function displayPhoneMessage() {
+        if (phoneMessage !== "") {
+          fill(255, 0, 0);
+          textSize(24);
+          textAlign(LEFT, TOP);
+          text(phoneMessage, 20, 50); // Display the phone message on the canvas
+        }
+      }
+
+      function displayLaptopMessage() {
+        if (laptopMessage !== "") {
+          fill(255, 0, 0);
+          textSize(24);
+          textAlign(LEFT, TOP);
+          text(laptopMessage, 20, 200); // Display the laptop message on the canvas
+        }
+      }
+
+
+
+      function displayOptions() {
+        if (showOptions) {
+          fill(0, 255, 0);
+          textSize(20);
+          textAlign(LEFT, TOP);
+          text('1. Ignore', 20, 100);
+          text('2. Getting off now, I'll be right there', 20, 130);
+        } else if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
+          fill(0, 255, 0);
+          textSize(20);
+          textAlign(LEFT, TOP);
+          text('1. Why do I always have to buy beer? You do it!', 20, 100);
+          text('2. I'll be right there, Coors Banquet good with you?', 20, 130);
+        }
+      }
+
       function checkInteractiveZones() {
+        let inZone = false;
+
         // Laptop screen zone (approx. bottom center)
         if (mouseX > 400 && mouseX < 600 && mouseY > 700 && mouseY < 900) {
           fill(255, 0, 0);
           textSize(20);
           text('Laptop Screen', mouseX + 10, mouseY + 10);
+          inZone = true;
         }
 
         // Phone zone (approx. to the right of the laptop screen)
@@ -60,13 +109,74 @@
           fill(255, 0, 0);
           textSize(20);
           text('Phone', mouseX + 10, mouseY + 10);
+          inZone = true;
         }
 
-        // Man in the doorway zone (approx. top center)
+        // The Creature zone (approx. top center)
         if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
           fill(255, 0, 0);
           textSize(20);
-          text('Man in Doorway', mouseX + 10, mouseY + 10);
+          text('The Creature', mouseX + 10, mouseY + 10);
+          inZone = true;
+        }
+
+        // Change cursor to pointer if in an interactive zone
+        if (inZone) {
+          cursor('pointer');
+        } else {
+          cursor('default');
+        }
+      }
+
+      function mousePressed() {
+        laptopMessage = "Email from Jerry: Dude, check your phone, everyone's wondering where you're at!";
+}
+
+        // Phone zone click action
+        if (mouseX > 650 && mouseX < 800 && mouseY > 800 && mouseY < 950) {
+          console.log('Phone clicked');
+          points += 10;
+          phoneMessage = "Text from Jerry- Dude, the party's about to start, where are you?";
+          showOptions = true;
+        }
+
+        // The Creature zone click action
+        if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
+          console.log('The Creature clicked');
+          points += 10;
+          creatureMessage = "Hey buddy, did ya get my email?";
+        }
+
+        // Handle options click
+        if (showOptions) {
+          // Ignore option
+          if (mouseX > 20 && mouseX < 180 && mouseY > 100 && mouseY < 120) {
+            points -= 500;
+            showOptions = false;
+            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
+          }
+
+          // "Getting off now" option
+          if (mouseX > 20 && mouseX < 450 && mouseY > 130 && mouseY < 150) {
+            points += 500;
+            showOptions = false;
+            phoneMessage = "Text from Anna: You're picking up the beer right? Where are you?";
+          }
+        }
+
+        // Handle options click for Anna's message
+        if (phoneMessage === "Text from Anna: You're picking up the beer right? Where are you?") {
+          // "Why do I always have to buy beer? You do it!" option
+          if (mouseX > 20 && mouseX < 450 && mouseY > 100 && mouseY < 120) {
+            points -= 500;
+            phoneMessage = "";
+          }
+
+          // "I'll be right there, Coors Banquet good with you?" option
+          if (mouseX > 20 && mouseX < 600 && mouseY > 130 && mouseY < 150) {
+            points += 500;
+            phoneMessage = "";
+          }
         }
       }
     </script>
