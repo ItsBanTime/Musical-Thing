@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple P5.js Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let bgImage;
+
+      function preload() {
+        bgImage = loadImage('./spookytimeFR.jpg');
+      }
+
+      function setup() {
+        let canvas = createCanvas(1000, 1000);
+        canvas.parent(document.body);
+      }
+
+      function draw() {
+        if (bgImage) {
+          background(bgImage);
+        } else {
+          background(200);
+        }
+        fill(0);
+        ellipse(mouseX, mouseY, 50, 50); // Draw a circle that follows the mouse
+        displayCoordinates();
+        checkInteractiveZones();
+      }
+
+      function displayCoordinates() {
+        fill(255);
+        textSize(16);
+        text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10); // Display mouse coordinates in the bottom-left corner
+      }
+
+      function checkInteractiveZones() {
+        // Laptop screen zone (approx. bottom center)
+        if (mouseX > 400 && mouseX < 600 && mouseY > 700 && mouseY < 900) {
+          fill(255, 0, 0);
+          textSize(20);
+          text('Laptop Screen', mouseX + 10, mouseY + 10);
+        }
+
+        // Phone zone (approx. bottom left)
+        if (mouseX > 100 && mouseX < 300 && mouseY > 800 && mouseY < 950) {
+          fill(255, 0, 0);
+          textSize(20);
+          text('Phone', mouseX + 10, mouseY + 10);
+        }
+
+        // Man in the doorway zone (approx. top center)
+        if (mouseX > 450 && mouseX < 550 && mouseY > 50 && mouseY < 300) {
+          fill(255, 0, 0);
+          textSize(20);
+          text('Man in Doorway', mouseX + 10, mouseY + 10);
+        }
+      }
+    </script>
+  </body>
+</html>
